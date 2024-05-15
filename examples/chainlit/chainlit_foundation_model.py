@@ -72,18 +72,19 @@ docs = [Document(page_content=text) for text in text_splitter.split_text(docs[0]
 embeddings = DatabricksEmbeddings(endpoint="databricks-bge-large-en")
 chroma = Chroma.from_documents(docs, embeddings)
 chroma_retriever = chroma.as_retriever(search_type="mmr", search_kwargs={"k": 5, "include_metadata": True})
-bm25_retriever = BM25Retriever.from_documents(docs, search_type="mmr", search_kwargs={"k": 5, "include_metadata": True})
-lotr = MergerRetriever(retrievers=[chroma_retriever, bm25_retriever])
-#
-filter_ = EmbeddingsRedundantFilter(embeddings=embeddings)
-reordering = LongContextReorder()
-pipeline = DocumentCompressorPipeline(transformers=[filter_, reordering])
-compression_retriever = ContextualCompressionRetriever(
-    base_compressor=pipeline, base_retriever=lotr
-)
+# bm25_retriever = BM25Retriever.from_documents(docs, search_type="mmr", search_kwargs={"k": 5, "include_metadata": True})
+# lotr = MergerRetriever(retrievers=[chroma_retriever, bm25_retriever])
+# #
+# filter_ = EmbeddingsRedundantFilter(embeddings=embeddings)
+# reordering = LongContextReorder()
+# pipeline = DocumentCompressorPipeline(transformers=[filter_, reordering])
+# compression_retriever = ContextualCompressionRetriever(
+#     base_compressor=pipeline, base_retriever=lotr
+# )
 
 rag_prompt = (
-        {"context": compression_retriever | format_docs, "question": RunnablePassthrough()}
+        # {"context": compression_retriever | format_docs, "question": RunnablePassthrough()}
+        {"context": chroma_retriever | format_docs, "question": RunnablePassthrough()}
         | prompt
 )
 

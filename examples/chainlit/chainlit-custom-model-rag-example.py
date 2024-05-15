@@ -21,18 +21,21 @@ dbutils.library.restartPython()
 
 # MAGIC %md
 # MAGIC
-# MAGIC ### RAG Demo using Foundation Model APIs (Mixtral 8x7b Instruct Chat + BGE-en-Large Embeddings)
+# MAGIC ### RAG Demo using Custom Model APIs
 # MAGIC
-# MAGIC Take a look at the langchain code in the file `chainlit_foundation_model.py`.
+# MAGIC Take a look at the langchain code in the file `chainlit_custom_model.py`.
 
 # COMMAND ----------
 
 import os
-
 os.environ["DATABRICKS_TOKEN"] = dbutils.secrets.get("felix-flory", "pat")
 
+# COMMAND ----------
+
+
+
 current_directory = os.getcwd()
-script_path = current_directory + "/chainlit_foundation_model.py"
+script_path = current_directory + "/chainlit_custom_model.py"
 
 # COMMAND ----------
 
